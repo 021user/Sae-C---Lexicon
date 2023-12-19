@@ -1,10 +1,9 @@
-#include "Carte.h"
 struct Joueur
 {
     int NoOrdre;
     int main;
     bool malus = false;
-    
+
 };
 
 struct Joueurs
