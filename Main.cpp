@@ -1,7 +1,6 @@
-#include <Joueur.cpp>
-#include <Pile.cpp>
-#include <Carte.cpp>
-
+#include "Pile.cpp"
+#include "Carte.cpp"
+#include "Joueur.cpp"
 
 
 int main()
@@ -16,11 +15,12 @@ int main()
 
     void initialiser(Joueur& j, unsigned int c); 
     Joueur joueur; // tableau de joueurs
-    initialiser(joueur, c); // initialise les joueurs
+    std::cout << "(Commandes valides : TEPRC)\n";
 
+    // while (compterJoueurs() > 1) {
+        // ...
+    //}
     
-    melange(pilecachee); // mélange les cartes
-    tirerCartes(joueur, pilecachee, 7); // tire 7 cartes pour chaque joueur
     while (joueur.mains != 0) 
     {
 

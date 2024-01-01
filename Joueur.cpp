@@ -63,6 +63,17 @@ void afficherSituation(Joueur& joueur, Carte& carteExposee, std::vector<std::str
     }
 }
 
+int compterJoueurs(Joueur* joueurs, int nombreJoueurs) {
+    int compteur = 0;
+    for (int i = 0; i < nombreJoueurs; i++) {
+        if (joueurs[i].mains != 0) {
+            compteur++;
+        }
+    }
+    return compteur;
+}
+
+
 
 void jouerCoup(char* coup, Joueur& joueur, char mots[], int numMots, Pile& talon, Carte& carteExposee) {
     char action = coup[0];
