@@ -1,65 +1,39 @@
-#include <Carte.cpp> // on inclut Carte.
-#include <Pile.cpp> // on inclut Pile.
+// DP : Tu utilises std::cout mais tu as oublié d'inclure iostream
+#include <iostream> 
 
-struct Joueur // structure d'un joueur
-{
-    int id; // numÃ©ro d'ordre
-    Carte** mains; // tableau de cartes
-    bool malus = false; // malus ou pas
-    int nbCartes; // nombre de cartes
-};
+#include "Joueur.h"
 
-struct Joueurs // tableau de joueurs
-{
-    unsigned int nbJoueurs; // nombre de joueurs
-    Joueur** joueurs; // tableau de joueurs
-};
-
+// DP : 7 est un nombre magique. Les joueurs commencent avec 10 cartes, pas 7.
 void initialiser(Joueurs& j, unsigned int c) // c = nombre de joueurs 
 {
     j.nbJoueurs = c; // nombre de joueurs
-    j.joueurs = new Joueur* [c]; // tableau de joueurs
+    j.joueurs = new Joueur * [c]; // tableau de joueurs
     for (unsigned int i = 0; i < c; i++) // pour chaque joueur 
     {
-        Joueur* joueur = new Joueur; 
+        Joueur* joueur = new Joueur;
         joueur->id = i; // change "NoOrdre" to "id"
-        joueur->mains = new Carte* [10]; // 10 cartes par joueur
-        joueur->nbCartes = 0; // 0 cartes au dÃ©but
+        joueur->mains = new Carte * [7]; // 10 cartes par joueur
+        joueur->nbCartes = 0; // 0 cartes au début
         j.joueurs[i] = joueur; // on met le joueur dans le tableau de joueurs
     }
-};
+}; // DP : Il y a un point-virgule de trop ici
 
-void detruire(Joueurs& j) // dÃ©truit les joueurs
+void detruire(Joueurs& j) // détruit les joueurs
 {
     for (unsigned int i = 0; i < j.nbJoueurs; i++) // pour chaque joueur
     {
-        delete[] j.joueurs[i]->mains; // on dÃ©truit les mains
-        delete j.joueurs[i]; // on dÃ©truit le joueur
-        j.joueurs[i] = nullptr; // on met le joueur Ã  nullptr
-    } 
-    delete[] j.joueurs; // on dÃ©truit le tableau de joueurs
-    j.joueurs = nullptr; // on met le tableau de joueurs Ã  nullptr
-}; 
+        delete[] j.joueurs[i]->mains; // on détruit les mains
+        delete j.joueurs[i]; // on détruit le joueur
+        j.joueurs[i] = nullptr; // on met le joueur à nullptr
+    }
+    delete[] j.joueurs; // on détruit le tableau de joueurs
+    j.joueurs = nullptr; // on met le tableau de joueurs à nullptr
+}; // DP : Il y a un point-virgule de trop ici
 
 // Gestions des malus
 void gererMalus(Joueur* joueur) {
     if (joueur->malus) {
-        // Ajoutez le code pour gÃ©rer le malus ici
-    }
-}
-
-
-void afficherSituation(Joueur& joueur, Carte& carteExposee, std::vector<std::string>& mots) {
-    std::cout << "C'est au tour du joueur " << joueur.id << " de jouer.\n";
-    std::cout << "La carte exposÃ©e est : " << carteExposee.attribut << "\n";
-    std::cout << "Les cartes dÃ©tenues par ce joueur sont : ";
-    for (int i = 0; i < joueur.nbCartes; ++i) {
-        std::cout << joueur.mains[i]->attribut << " ";
-    }
-    std::cout << "\n";
-    std::cout << "Les mots posÃ©s sur la table sont : \n";
-    for (int i = 0; i < mots.size(); ++i) {
-        std::cout << i+1 << ". " << mots[i] << "\n";
+        // Ajoutez le code pour gérer le malus ici
     }
 }
 
@@ -73,63 +47,38 @@ int compterJoueurs(Joueur* joueurs, int nombreJoueurs) {
     return compteur;
 }
 
-
-
 void jouerCoup(char* coup, Joueur& joueur, char mots[], int numMots, Pile& talon, Carte& carteExposee) {
     char action = coup[0];
     switch (action) {
-        case 'T': {
-            char lettre = coup[2];
-            // VÃ©rifiez que le joueur a la lettre, puis dÃ©placez la carte du talon Ã  la main du joueur
-            break;
-        }
-        case 'E': {
-            char lettre = coup[2];
-            // VÃ©rifiez que le joueur a la lettre, puis Ã©changez la carte avec la carte exposÃ©e
-            break;
-        }
-        case 'P': {
-            char* mot = &coup[2];
-            // VÃ©rifiez que le joueur a toutes les lettres du mot, puis posez le mot sur la table
-            break;
-        }
-        case 'R': {
-            int numero = coup[2] - '0';
-            char* mot = &coup[4];
-            // VÃ©rifiez que le joueur peut construire le nouveau mot, puis remplacez le mot sur la table
-            break;
-        }
-        case 'C': {
-            int numero = coup[2] - '0';
-            char* mot = &coup[4];
-            // VÃ©rifiez que le joueur peut construire le nouveau mot, puis complÃ©tez le mot sur la table
-            break;
-        }
-        default:
-            printf("Coup non reconnu.\n");
+    case 'T': {
+        char lettre = coup[2];
+        // Vérifiez que le joueur a la lettre, puis déplacez la carte du talon à la main du joueur
+        break;
     }
-}
-
-void afficherSituation(Joueur& joueur, Carte& carteExposee, char cartesJoueur[], char* mots, int numMots) {
-    printf("* Joueur %d (%c) ", joueur.id, carteExposee.attribut);
-    for (int i = 0; i < joueur.nbCartes; i++) {
-        printf("%c", cartesJoueur[i]);
+    case 'E': {
+        char lettre = coup[2];
+        // Vérifiez que le joueur a la lettre, puis échangez la carte avec la carte exposée
+        break;
     }
-    printf("\n");
-    for (int i = 0; i < numMots; i++) {
-        printf("%d: %s\n", i + 1, mots[i]);
+    case 'P': {
+        char* mot = &coup[2];
+        // Vérifiez que le joueur a toutes les lettres du mot, puis posez le mot sur la table
+        break;
     }
-}
-
-void melange(Pile& pile) {
-    // Utilise l'algorithme de Fisher-Yates pour mÃ©langer la pile
-    for (int i = pile.sommet; i > 0; i--) {
-        int j = rand() % (i + 1);
-
-        // Ã‰change pile.tab[i] et pile.tab[j]
-        Carte* temp = pile.tab[i];
-        pile.tab[i] = pile.tab[j];
-        pile.tab[j] = temp;
+    case 'R': {
+        int numero = coup[2] - '0';
+        char* mot = &coup[4];
+        // Vérifiez que le joueur peut construire le nouveau mot, puis remplacez le mot sur la table
+        break;
+    }
+    case 'C': {
+        int numero = coup[2] - '0';
+        char* mot = &coup[4];
+        // Vérifiez que le joueur peut construire le nouveau mot, puis complétez le mot sur la table
+        break;
+    }
+    default:
+        printf("Coup non reconnu.\n");
     }
 }
 
@@ -140,9 +89,79 @@ void tirerCartes(Joueur& joueur, Pile& pile, int nombreCartes) {
         return;
     }
 
-    // Ajoute les cartes Ã  la main du joueur
+    // Ajoute les cartes à la main du joueur
     for (int i = 0; i < nombreCartes; i++) {
         joueur.mains[i] = pile.tab[pile.sommet];
         pile.sommet--;
     }
+}
+
+int compterJoueurs(Joueurs& joueurs) {
+    int count = 0;
+    for (unsigned int i = 0; i < joueurs.nbJoueurs; i++) {
+        if (joueurs.joueurs[i]->nbCartes > 0) {
+            count++;
+        }
+    }
+    return count;
+}
+
+// DP : Il faut inclure <iostream> pour pouvoir employer std::cout
+void afficherEtatJeu(Joueurs& joueurs, int joueurActuel) {
+    std::cout << "* Joueur " << joueurActuel + 1 << " (S) ";
+    for (int i = 0; i < joueurs.joueurs[joueurActuel]->nbCartes; i++) {
+        Carte* carte = joueurs.joueurs[joueurActuel]->mains[i];
+        if (carte) {
+            std::cout << carte->attribut; // Use "attribut" to get the card's name
+        }
+    }
+    std::cout << std::endl;
+}
+
+void retirerCarte(Joueur* joueur, char attribut) {
+    for (int i = 0; i < joueur->nbCartes; i++) {
+        // DP : Le champ attribut a été changé en un simple caractère, il faut adapter le code
+//        if (joueur->mains[i]->attribut[0] == attribut) {
+        if (joueur->mains[i]->attribut == attribut) {
+            // Déplacez toutes les cartes après cette carte une position vers la gauche
+            for (int j = i; j < joueur->nbCartes - 1; j++) {
+                joueur->mains[j] = joueur->mains[j + 1];
+            }
+            // Réduisez le nombre de cartes du joueur de un
+            joueur->nbCartes--;
+            // Arrêtez la boucle une fois que vous avez trouvé et retiré la carte
+            break;
+        }
+    }
+}
+
+bool carteDansMain(Joueur* joueur, char attribut) {
+    for (int i = 0; i < joueur->nbCartes; i++) {
+        // DP : Le champ attribut a été changé en un simple caractère, il faut adapter le code
+//        if (joueur->mains[i]->attribut[0] == attribut) {
+        if (joueur->mains[i]->attribut == attribut) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool peutFormerMot(Joueur* joueur, std::string mot) {
+    for (char c : mot) {
+        if (!carteDansMain(joueur, c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool peutChangerMot(Joueur* joueur, std::string motExistant, std::string nouveauMot) {
+    // Créez une copie de la main du joueur
+    Joueur copieJoueur = *joueur;
+    // Retirez les lettres du mot existant de la copie de la main du joueur
+    for (char c : motExistant) {
+        retirerCarte(&copieJoueur, c);
+    }
+    // Vérifiez si le joueur peut former le nouveau mot avec les cartes restantes
+    return peutFormerMot(&copieJoueur, nouveauMot);
 }
