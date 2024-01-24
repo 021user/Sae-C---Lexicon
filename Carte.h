@@ -1,10 +1,11 @@
-// DP : Les fichiers .h doivent commencer par la ligne suivante
-#pragma once
-
+#include <iostream>
+#include <cstdlib>
+#ifndef CARTE_H
+#define CARTE_H
 struct Carte 
 {
     int point; 
-    char attribut; // DP : un caratere suffit (char* transformé en char)
+    char valeur;
 };
 
 struct Pile 
@@ -14,10 +15,17 @@ struct Pile
     int sommet;
 };
 
-// DP : On ne met pas de code dans les .h mais uniquement le prototype des fonctions.
-// DP : Le code des fonctions doit être dans un .cpp
+// Prototypes des fonctions
 void initialiser(Pile& pile, unsigned int c);
 
 void detruire(Pile& pile);
 
 void melange(Pile& pile);
+
+void ajouterCarte(Pile& pile, Carte* nouvelleCarte);
+void transfererCarteSommet(Pile& pileSource, Pile& pileDestination);
+Carte* retirerCarte(Pile& pile);
+#endif // CARTE_H
+
+
+
